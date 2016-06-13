@@ -18,7 +18,7 @@ public class ModuloConexao {
         // Armazenando informações do banco
         String url = "jdbc:mysql://localhost:3306/dbinfox";
         String user = "root";
-        String password = "Unesp2015&";
+        String password = "";
         // Estabelecendo a conexão com o banco
         try {
             Class.forName(driver);
