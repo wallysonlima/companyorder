@@ -4,18 +4,51 @@
  * and open the template in the editor.
  */
 package br.com.infox.view;
+import java.sql.*;
+import br.com.infox.dao.ModuloConexao;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author wally
  */
 public class TelaUsuario extends javax.swing.JInternalFrame {
-
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
     /**
      * Creates new form TelaUsuario
      */
     public TelaUsuario() {
         initComponents();
+        conexao = ModuloConexao.conector();
+    }
+    
+    public void consultar() {
+        String sql = "select * from tbusuarios where iduser=?;";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtUsuId.getText() );
+            rs = pst.executeQuery();
+            
+            if ( rs.next() ) {
+                txtUsuNome.setText( rs.getString(2) );
+                txtUsuFone.setText( rs.getString(3) );
+                txtUsuoLogin.setText( rs.getString(4) );
+                txtUsuSenha.setText( rs.getString(5) );
+                // a linha abaixo se refere ao combobox
+                cboUsuPerfil.setSelectedItem( rs.getString(6) );
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuário não cadastrado !");
+                txtUsuNome.setText("");
+                txtUsuFone.setText("");
+                txtUsuoLogin.setText("");
+                txtUsuSenha.setText("");
+                cboUsuPerfil.setSelectedItem(0);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
 
     /**
@@ -62,7 +95,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Perfil");
 
-        cboUsuPerfil.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Admin\t", "Restrito" }));
+        cboUsuPerfil.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "admin", "restrito" }));
 
         btnUsuCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/create.png"))); // NOI18N
         btnUsuCreate.setToolTipText("Add Usuário");
@@ -75,6 +108,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         btnUsuRead.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/read.png"))); // NOI18N
         btnUsuRead.setToolTipText("Consultar");
         btnUsuRead.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUsuRead.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuReadActionPerformed(evt);
+            }
+        });
 
         btnUsuDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/delete.png"))); // NOI18N
         btnUsuDelete.setToolTipText("Deletar");
@@ -162,6 +200,10 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 
         setBounds(0, 0, 640, 480);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnUsuReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuReadActionPerformed
+        consultar();
+    }//GEN-LAST:event_btnUsuReadActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
