@@ -1,4 +1,4 @@
-# workOrderInformatics
+# Computer Company Order
 System responsible for carrying out the work order of a computer micro-enterprise. It was developed in Java, use MVC design pattern and Mysql. This is a CRUD system.
 
 ![View Login](https://github.com/WallysonNunes/workOrderInformatics/blob/master/screenshot/login.png)
